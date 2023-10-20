@@ -43,7 +43,7 @@ def package(request, req_status, tag):
     if req_status == "E8":
         museum_package = MuseumPackages.objects.get(package_tag=tag)
         print(museum_package.dates.all())
-        serializer = MuseumPackagesSerializer(museum_package)
+        serializer = MuseumPackagesSerializer2(museum_package)
         print(museum_package)
     elif req_status == "E9":
         bus_package = BusPackages.objects.get(package_tag=tag)

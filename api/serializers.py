@@ -14,7 +14,7 @@ class BusPackagesSerializer(serializers.ModelSerializer):
         model = BusPackages
         fields = "__all__"
 
-class MuseumPackagesSerializer(serializers.ModelSerializer):
+class MuseumPackagesSerializer2(serializers.ModelSerializer):
     class Meta:
         model = MuseumPackages
         fields = "__all__"
@@ -33,3 +33,8 @@ class MuseumPackagesSerializer(serializers.ModelSerializer):
         data['dates'] = date_list
 
         return data
+
+class MuseumPackagesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MuseumPackages
+        fields = "__all__"
