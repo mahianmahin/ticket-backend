@@ -15,7 +15,6 @@ def process_query(model_query):
 @api_view(['GET'])
 def hero_image(request):
     hero_image = process_query(HeroImage.objects.all())
-    print(hero_image)
 
     return Response({
         'status': status.HTTP_200_OK,
@@ -42,9 +41,8 @@ def packages(request):
 def package(request, req_status, tag):
     if req_status == "E8":
         museum_package = MuseumPackages.objects.get(package_tag=tag)
-        print(museum_package.dates.all())
         serializer = MuseumPackagesSerializer2(museum_package)
-        print(museum_package)
+        
     elif req_status == "E9":
         bus_package = BusPackages.objects.get(package_tag=tag)
         serializer = BusPackagesSerializer(bus_package)
@@ -53,13 +51,4 @@ def package(request, req_status, tag):
     return Response({
         'status': status.HTTP_200_OK,
         'data': serializer.data
-    })
-
-@api_view(['GET'])
-def get_dates(request, id):
-    # dates = Date.
-    pass
-
-    return Response({
-        "status": status.HTTP_200_OK
     })

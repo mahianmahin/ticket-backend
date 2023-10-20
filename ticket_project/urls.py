@@ -10,7 +10,6 @@ urlpatterns = [
     path('hero_image/', hero_image),
     path('packages/', packages),
     path('package/<str:req_status>/<int:tag>/', package),
-    path('dates/<int:id>/', get_dates),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
