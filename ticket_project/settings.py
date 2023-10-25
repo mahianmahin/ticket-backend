@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -8,6 +9,10 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'static')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+SITE_URL = "http://localhost:3000/"
+
+# stripe
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,7 +40,9 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'corsheaders',
-    'ckeditor'
+    'ckeditor',
+    'rest_framework_simplejwt',
+
 ]
 
 MIDDLEWARE = [
@@ -49,6 +56,12 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 ROOT_URLCONF = 'ticket_project.urls'
 
@@ -79,6 +92,18 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+# JWT token configuration
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),  # Set the access token lifetime (default is 5 minutes)
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),     # Set the refresh token lifetime (default is 1 day)
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=120), # Set the sliding token lifetime (optional)
+    'SLIDING_TOKEN_LIFETIME_LEEWAY': timedelta(minutes=20), # Set the sliding token lifetime leeway (optional)
+    'ROTATE_REFRESH_TOKENS': False,  # Set to True to rotate refresh tokens on each request (optional)
+    'ALGORITHM': 'HS256',  # Set the JWT algorithm (default is 'HS256')
+    'SIGNING_KEY': SECRET_KEY,  # Use the Django SECRET_KEY as the signing key (optional)
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Set the authentication header types (default is ('Bearer',))
 }
 
 

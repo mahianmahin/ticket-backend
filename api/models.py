@@ -29,6 +29,9 @@ class BusPackages(models.Model):
 
     package_tag = models.IntegerField(default=random_number())
 
+    def __str__(self):
+        return str(self.title)
+
 
 
 class Date(models.Model):
@@ -58,3 +61,6 @@ class MuseumPackages(models.Model):
     dates = models.ManyToManyField(Date)
 
     package_tag = models.IntegerField(default=random_number())
+
+    def __str__(self):
+        return str(self.title)
