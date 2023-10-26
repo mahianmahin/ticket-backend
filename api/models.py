@@ -64,3 +64,22 @@ class MuseumPackages(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+
+class PurchasedTickets(models.Model):
+    user = models.CharField(max_length=500, null=True, blank=True)
+    package = models.CharField(max_length=1000, null=True, blank=True)
+    total_price = models.IntegerField(default=0)
+    
+    adults = models.IntegerField(default=0)
+    youths = models.IntegerField(default=0)
+    infants = models.IntegerField(default=0)
+
+    selected_date = models.CharField(max_length=20, null=True, blank=True)
+    paid = models.BooleanField(default=False)
+
+    package_tag = models.IntegerField(default=0)
+    package_unique_identifier = models.IntegerField(default=0)
+
+    qr_code = models.ImageField(upload_to="qr_codes")
+    qr_code_scanned = models.BooleanField(default=False)

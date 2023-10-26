@@ -20,3 +20,7 @@ class DateAdmin(admin.ModelAdmin):
 @admin.register(MuseumPackages)
 class MuseumAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'duration', 'off_price', 'adult_price', 'youth_price', 'infant_price']
+
+@admin.register(PurchasedTickets)
+class PurchasedAdmin(admin.ModelAdmin):
+    list_display = ['user', 'package', 'total_price', 'adults', 'youths', 'infants', 'paid', 'package_tag', 'qr_code_scanned']
