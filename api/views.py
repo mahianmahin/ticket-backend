@@ -1,13 +1,16 @@
 import json
 import random
+from io import BytesIO
 
 import qrcode
 import stripe
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.files import File
 from django.core.serializers import serialize
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
+from PIL import Image
 from rest_framework import status
 from rest_framework.decorators import (api_view, parser_classes,
                                        permission_classes)
@@ -64,6 +67,16 @@ def package(request, req_status, tag):
     })
 
 
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def success_page(request, unique_identifier):
+    package_ins = PurchasedTickets.objects.get(package_unique_identifier=unique_identifier)
+
+    return Response({
+        'url': package_ins.qr_code.url
+    })
+
 @api_view(['POST'])
 # @parser_classes([MultiPartParser])
 def user_register(request):
@@ -92,16 +105,13 @@ def user_register(request):
             'status': status.HTTP_508_LOOP_DETECTED,
             'data': str(e)
         })
-    
-api_view(['GET'])
-def qrcode(request):
-    img = qrcode.make("test")
-    img.save("/codes/img1.png")
-
-    return Response({})
 
 # stripe secret key
 stripe.api_key = "sk_test_51JLudiCHMxzhWuhuG5YgutpTZ1yuhTTb6s3rWDlttErYKMfKI5K0LxcMylDP3Laq2eZ3PmvinzZfZl1Mh5fRmxrM00weRJKw1M"
+
+
+# qr_code generation
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -136,8 +146,10 @@ def create_checkout_session(request):
             selected_date = selected_date,
             package_tag = package_instance.package_tag,
             package_unique_identifier = package_unique_identifier,
-            
+            qr_content = f"{settings.SITE_URL}{package_unique_identifier}/"
         )
+
+        purchased_ticket_ins.save()
         
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -156,8 +168,9 @@ def create_checkout_session(request):
                 },
             ],
             mode='payment',
-            success_url= f'{settings.SITE_URL}success/{package_unique_identifier}/',
-            cancel_url= f'{settings.SITE_URL}cancel/',
+            success_url = f'{settings.SITE_URL}success/{package_unique_identifier}/',
+            cancel_url = f'{settings.SITE_URL}cancel/',
+            client_reference_id = package_unique_identifier,
         )
 
         return Response({'id': session.id})
@@ -174,7 +187,13 @@ def stripe_webhook(request):
     event_type = payload['type']
 
     if event_type == 'checkout.session.completed':
-        print('Payment Successful')
+        session = payload['data']['object']
+        client_reference_id = session.get('client_reference_id')
+        
+        purchased_tickets_ins = PurchasedTickets.objects.get(package_unique_identifier=client_reference_id)
+        purchased_tickets_ins.paid = True
+
+        purchased_tickets_ins.save()
 
     elif event_type == 'checkout.session.async_payment_failed':
         print('Payment Failed')
@@ -183,3 +202,43 @@ def stripe_webhook(request):
         print(f'Unhandled event type: {event_type}')
 
     return JsonResponse({'status': 'success'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def dashboard(request):
+    packages_ins = PurchasedTickets.objects.filter(user=request.user.username,)
+    serializer = PurchasedTicketsSerializer(packages_ins, many=True)
+    print(serializer.data)
+
+    return Response({
+        'data': serializer.data
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def authenticate_qr_codes(request, code):
+    if request.user.is_staff:
+        ticket_ins = PurchasedTickets.objects.get(package_unique_identifier=code)
+        serializer = PurchasedTicketsSerializer(ticket_ins)
+
+        if ticket_ins.qr_code_scanned:
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data,
+                'msg': 'This ticket is already claimed!'
+            })
+        
+        else:
+            ticket_ins.qr_code_scanned = True
+            ticket_ins.save()
+
+            return Response({
+                'status': status.HTTP_200_OK,
+                'data': serializer.data,
+                'msg': 'Ticket claimed successfully!'
+            })
+
+    return Response({
+        'status': status.HTTP_401_UNAUTHORIZED,
+        'msg': 'You are not authorized to process the ticket!'
+    })

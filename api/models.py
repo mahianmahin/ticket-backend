@@ -1,7 +1,11 @@
 import random
+from io import BytesIO
 
+import qrcode
 from ckeditor.fields import RichTextField
+from django.core.files import File
 from django.db import models
+from PIL import Image, ImageDraw
 
 
 def random_number():
@@ -11,6 +15,7 @@ class HeroImage(models.Model):
     image = models.ImageField(upload_to="hero_images")
 
 class BusPackages(models.Model):
+    purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="bus_packages")
     type = models.CharField(max_length=200, null=True, blank=True)
     title = models.CharField(max_length=200, null=True, blank=True)
@@ -42,6 +47,7 @@ class Date(models.Model):
 
     
 class MuseumPackages(models.Model):
+    purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="museum_packages")
     type = models.CharField(max_length=200, null=True, blank=True)
     title = models.CharField(max_length=200, null=True, blank=True)
@@ -81,5 +87,22 @@ class PurchasedTickets(models.Model):
     package_tag = models.IntegerField(default=0)
     package_unique_identifier = models.IntegerField(default=0)
 
-    qr_code = models.ImageField(upload_to="qr_codes")
+    qr_content = models.CharField(max_length=500, null=True, blank=True)
+
+    qr_code = models.ImageField(upload_to="qr_codes", null=True, blank=True)
     qr_code_scanned = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        qrcode_img = qrcode.make(self.qr_content)
+        canvas = Image.new('RGB', (378, 378), 'white')
+        draw = ImageDraw.Draw(canvas)
+        canvas.paste(qrcode_img)
+        
+        file_name = f"qr_code-{self.package_unique_identifier}.png"
+
+        buffer = BytesIO()
+        canvas.save(buffer, 'PNG')
+        self.qr_code.save(file_name, File(buffer), save=False)
+        canvas.close()
+
+        super().save(*args, **kwargs)

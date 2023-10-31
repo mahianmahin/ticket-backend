@@ -38,3 +38,8 @@ class MuseumPackagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = MuseumPackages
         fields = "__all__"
+
+class PurchasedTicketsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PurchasedTickets
+        fields = "__all__"
