@@ -10,8 +10,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-SITE_URL = "http://localhost:3000/"
-# SITE_URL = "https://sightseeingroma.netlify.app/"
+# SITE_URL = "http://localhost:3000/"
+SITE_URL = "https://sightseeingroma.netlify.app/"
 
 # stripe
 
