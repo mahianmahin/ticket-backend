@@ -134,7 +134,7 @@ LANGUAGE_CODE = 'en-us'
 
 DATE_FORMAT = 'd-m-Y'
 
-TIME_ZONE = 'Asia/Dhaka'
+TIME_ZONE = 'Europe/Rome'
 
 USE_I18N = True
 
