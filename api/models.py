@@ -94,7 +94,7 @@ class PurchasedTickets(models.Model):
 
     def save(self, *args, **kwargs):
         qrcode_img = qrcode.make(self.qr_content)
-        canvas = Image.new('RGB', (378, 378), 'white')
+        canvas = Image.new('RGB', (398, 398), 'white')
         draw = ImageDraw.Draw(canvas)
         canvas.paste(qrcode_img)
         
