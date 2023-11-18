@@ -106,8 +106,11 @@ def user_register(request):
             'data': str(e)
         })
 
+test_secret_key = "sk_test_51O7GYsDBCudQgM49KyBAdFWQiPTP1KVWExXAmdqLNnFtBtiomOoVcDOWPpZQv09bthGoPvlqZJ8vc7SHEoE2agZB00nloJXZ2g"
+live_secret_key = "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"
+
 # stripe secret key
-stripe.api_key = "sk_test_51JLudiCHMxzhWuhuG5YgutpTZ1yuhTTb6s3rWDlttErYKMfKI5K0LxcMylDP3Laq2eZ3PmvinzZfZl1Mh5fRmxrM00weRJKw1M"
+stripe.api_key = test_secret_key
 
 
 # qr_code generation
