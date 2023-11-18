@@ -110,7 +110,7 @@ test_secret_key = "sk_test_51O7GYsDBCudQgM49KyBAdFWQiPTP1KVWExXAmdqLNnFtBtiomOoV
 live_secret_key = "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"
 
 # stripe secret key
-stripe.api_key = "sk_test_51O7GYsDBCudQgM49KyBAdFWQiPTP1KVWExXAmdqLNnFtBtiomOoVcDOWPpZQv09bthGoPvlqZJ8vc7SHEoE2agZB00nloJXZ2g"
+stripe.api_key = live_secret_key
 
 
 # qr_code generation
