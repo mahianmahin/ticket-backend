@@ -43,3 +43,8 @@ class PurchasedTicketsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PurchasedTickets
         fields = "__all__"
+
+class UtilitiesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Utilities
+        fields = "__all__"

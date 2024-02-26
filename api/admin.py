@@ -23,4 +23,8 @@ class MuseumAdmin(admin.ModelAdmin):
 
 @admin.register(PurchasedTickets)
 class PurchasedAdmin(admin.ModelAdmin):
-    list_display = ['user', 'package', 'selected_date', 'total_price', 'adults', 'youths', 'infants', 'paid', 'qr_code_scanned']
+    list_display = ['purchased_date', 'user', 'package', 'selected_date', 'total_price', 'adults', 'youths', 'infants', 'paid', 'qr_code_scanned']
+
+@admin.register(Utilities)
+class UtilitiesAdmin(admin.ModelAdmin):
+    list_display = ['privacy_policy', 'about_us', 'return_policy', 'refund_policy', 'terms_and_conditions']

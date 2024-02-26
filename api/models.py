@@ -45,7 +45,7 @@ class Date(models.Model):
     def __str__(self):
         return str(self.date)
 
-    
+
 class MuseumPackages(models.Model):
     purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="museum_packages")
@@ -73,10 +73,11 @@ class MuseumPackages(models.Model):
 
 
 class PurchasedTickets(models.Model):
+    purchased_date = models.DateTimeField(auto_now=True)
     user = models.CharField(max_length=500, null=True, blank=True)
     package = models.CharField(max_length=1000, null=True, blank=True)
     total_price = models.IntegerField(default=0)
-    
+
     adults = models.IntegerField(default=0)
     youths = models.IntegerField(default=0)
     infants = models.IntegerField(default=0)
@@ -97,7 +98,7 @@ class PurchasedTickets(models.Model):
         canvas = Image.new('RGB', (398, 398), 'white')
         draw = ImageDraw.Draw(canvas)
         canvas.paste(qrcode_img)
-        
+
         file_name = f"qr_code-{self.package_unique_identifier}.png"
 
         buffer = BytesIO()
@@ -106,3 +107,10 @@ class PurchasedTickets(models.Model):
         canvas.close()
 
         super().save(*args, **kwargs)
+
+class Utilities(models.Model):
+    privacy_policy = RichTextField()
+    about_us = RichTextField()
+    return_policy = RichTextField()
+    refund_policy = RichTextField()
+    terms_and_conditions = RichTextField()
