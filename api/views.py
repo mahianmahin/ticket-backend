@@ -66,6 +66,16 @@ def package(request, req_status, tag):
         'data': serializer.data
     })
 
+@api_view(['GET'])
+def utilities(request):
+    utilities = Utilities.objects.all()
+    utility_serializer = UtilitiesSerializer(utilities, many=True)
+
+    return Response({
+        'status':status.HTTP_200_OK,
+        'data': utility_serializer.data
+    })
+
 
 @csrf_exempt
 @api_view(['GET'])

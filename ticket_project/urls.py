@@ -13,6 +13,7 @@ urlpatterns = [
     path('packages/', packages),
     path('package/<str:req_status>/<int:tag>/', package),
     path('register/', user_register),
+    path('utility/', utilities),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
