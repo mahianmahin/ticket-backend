@@ -114,6 +114,10 @@ venv.bak/
 # mypy 
 .mypy_cache/ 
 
+api/__pycache__/
+api/migrations/
+ticket_project/__pycache__/
+
 # Sublime Text # 
 *.tmlanguage.cache 
 *.tmPreferences.cache 
