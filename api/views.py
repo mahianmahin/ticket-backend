@@ -21,8 +21,6 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import *
 
-# mahin
-
 
 def process_query(model_query):
     return json.loads(serialize("json", model_query))
