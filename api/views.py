@@ -228,30 +228,88 @@ def dashboard(request):
     })
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def authenticate_qr_codes(request, code):
-    if request.user.is_staff:
-        ticket_ins = PurchasedTickets.objects.get(package_unique_identifier=code)
-        serializer = PurchasedTicketsSerializer(ticket_ins)
+    # if request.user.is_staff:
+    ticket_ins = PurchasedTickets.objects.get(package_unique_identifier=code)
+    serializer = PurchasedTicketsSerializer(ticket_ins)
 
-        if ticket_ins.qr_code_scanned:
-            return Response({
-                'status': status.HTTP_200_OK,
-                'data': serializer.data,
-                'msg': 'This ticket is already claimed!'
-            })
+    agent_objects = AgentProperties.objects.all()
+    agent_list = [obj.agent.username for obj in agent_objects]
+
+    if ticket_ins.qr_code_scanned:
+        return Response({
+            'status': status.HTTP_200_OK,
+            'data': serializer.data,
+            'claimed': True,
+            'agent_list': agent_list,
+            'msg': 'This ticket is already claimed!'
+        })
         
-        else:
-            ticket_ins.qr_code_scanned = True
-            ticket_ins.save()
+    else:
+        # ticket_ins.qr_code_scanned = True
+        # ticket_ins.save()
 
-            return Response({
-                'status': status.HTTP_200_OK,
-                'data': serializer.data,
-                'msg': 'Ticket claimed successfully!'
-            })
+        return Response({
+            'status': status.HTTP_200_OK,
+            'data': serializer.data,
+            'claimed': False,
+            'agent_list': agent_list,
+            'msg': 'Ticket is not claimed!'
+        })
 
-    return Response({
-        'status': status.HTTP_401_UNAUTHORIZED,
-        'msg': 'You are not authorized to process the ticket!'
-    })
+@api_view(['GET'])
+def claim_ticket(request, code, agent_username, agent_code):
+
+    user = User.objects.get(username=agent_username)
+    agent_property = AgentProperties.objects.get(agent=user.id)
+
+    if agent_property.code == int(agent_code):
+        ticket_ins = PurchasedTickets.objects.get(package_unique_identifier=code)
+        ticket_ins.qr_code_scanned = True
+        ticket_ins.save()
+
+        return Response({
+            'status': status.HTTP_200_OK,
+            'success': True
+        })
+    
+    else:
+        return Response({
+            'status': status.HTTP_200_OK,
+            'success': False
+        })
+
+
+
+
+
+# backup of the function
+
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def authenticate_qr_codes(request, code):
+#     if request.user.is_staff:
+#         ticket_ins = PurchasedTickets.objects.get(package_unique_identifier=code)
+#         serializer = PurchasedTicketsSerializer(ticket_ins)
+
+#         if ticket_ins.qr_code_scanned:
+#             return Response({
+#                 'status': status.HTTP_200_OK,
+#                 'data': serializer.data,
+#                 'msg': 'This ticket is already claimed!'
+#             })
+        
+#         else:
+#             ticket_ins.qr_code_scanned = True
+#             ticket_ins.save()
+
+#             return Response({
+#                 'status': status.HTTP_200_OK,
+#                 'data': serializer.data,
+#                 'msg': 'Ticket claimed successfully!'
+#             })
+
+#     return Response({
+#         'status': status.HTTP_401_UNAUTHORIZED,
+#         'msg': 'You are not authorized to process the ticket!'
+#     })

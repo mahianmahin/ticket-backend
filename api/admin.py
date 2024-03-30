@@ -28,3 +28,7 @@ class PurchasedAdmin(admin.ModelAdmin):
 @admin.register(Utilities)
 class UtilitiesAdmin(admin.ModelAdmin):
     list_display = ['privacy_policy', 'about_us', 'return_policy', 'refund_policy', 'terms_and_conditions']
+
+@admin.register(AgentProperties)
+class AgentPropertiesAdmin(admin.ModelAdmin):
+    list_display = ['agent', 'code']

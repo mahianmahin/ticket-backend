@@ -25,6 +25,7 @@ urlpatterns = [
     path('success/<int:unique_identifier>/', success_page),
     path('dashboard/', dashboard),
     path('qr/auth/<int:code>/', authenticate_qr_codes),
+    path('claim/<int:code>/<str:agent_username>/<int:agent_code>/', claim_ticket),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

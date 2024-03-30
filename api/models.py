@@ -3,6 +3,7 @@ from io import BytesIO
 
 import qrcode
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import User
 from django.core.files import File
 from django.db import models
 from PIL import Image, ImageDraw
@@ -114,3 +115,7 @@ class Utilities(models.Model):
     return_policy = RichTextField()
     refund_policy = RichTextField()
     terms_and_conditions = RichTextField()
+
+class AgentProperties(models.Model):
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    code = models.IntegerField()
