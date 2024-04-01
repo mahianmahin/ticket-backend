@@ -24,7 +24,7 @@ class TicketFolders(models.Model):
     
 
 class BusPackages(models.Model):
-    folder = models.ForeignKey(TicketFolders, on_delete=models.CASCADE)
+    folder = models.ForeignKey(TicketFolders, on_delete=models.CASCADE, null=True)
     purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="bus_packages")
     type = models.CharField(max_length=200, null=True, blank=True)
@@ -57,7 +57,7 @@ class Date(models.Model):
 
 
 class MuseumPackages(models.Model):
-    folder = models.ForeignKey(TicketFolders, on_delete=models.CASCADE)
+    folder = models.ForeignKey(TicketFolders, on_delete=models.CASCADE, null=True)
     purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="museum_packages")
     type = models.CharField(max_length=200, null=True, blank=True)
