@@ -15,12 +15,12 @@ def random_number():
 class HeroImage(models.Model):
     image = models.ImageField(upload_to="hero_images")
 
-class TicketFolders(models.Model):
-    name = models.CharField(max_length=200, null=True, blank=True)
-    image = models.ImageField(upload_to="folder_images")
+# class TicketFolders(models.Model):
+#     name = models.CharField(max_length=200, null=True, blank=True)
+#     image = models.ImageField(upload_to="folder_images")
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
     
 
 class BusPackages(models.Model):
