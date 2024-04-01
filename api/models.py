@@ -15,7 +15,16 @@ def random_number():
 class HeroImage(models.Model):
     image = models.ImageField(upload_to="hero_images")
 
+class TicketFolders(models.Model):
+    name = models.CharField(max_length=200, null=True, blank=True)
+    image = models.ImageField(upload_to="folder_images")
+
+    def __str__(self):
+        return self.name
+    
+
 class BusPackages(models.Model):
+    folder = models.ForeignKey(TicketFolders, on_delete=models.CASCADE)
     purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="bus_packages")
     type = models.CharField(max_length=200, null=True, blank=True)
@@ -48,6 +57,7 @@ class Date(models.Model):
 
 
 class MuseumPackages(models.Model):
+    folder = models.ForeignKey(TicketFolders, on_delete=models.CASCADE)
     purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="museum_packages")
     type = models.CharField(max_length=200, null=True, blank=True)
@@ -119,3 +129,5 @@ class Utilities(models.Model):
 class AgentProperties(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     code = models.IntegerField()
+
+

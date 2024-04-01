@@ -32,3 +32,7 @@ class UtilitiesAdmin(admin.ModelAdmin):
 @admin.register(AgentProperties)
 class AgentPropertiesAdmin(admin.ModelAdmin):
     list_display = ['agent', 'code']
+
+@admin.register(TicketFolders)
+class FolderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'image']
