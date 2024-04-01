@@ -11,7 +11,7 @@ class HeroImageAdmin(admin.ModelAdmin):
 
 @admin.register(BusPackages)
 class BusPackageAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'duration', 'off_price', 'adult_price', 'youth_price', 'infant_price']
+    list_display = ['id', 'title', 'duration', 'off_price', 'adult_price', 'youth_price', 'infant_price', 'is_featured']
 
 @admin.register(Date)
 class DateAdmin(admin.ModelAdmin):
@@ -19,7 +19,7 @@ class DateAdmin(admin.ModelAdmin):
 
 @admin.register(MuseumPackages)
 class MuseumAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'duration', 'off_price', 'adult_price', 'youth_price', 'infant_price']
+    list_display = ['id', 'title', 'duration', 'off_price', 'adult_price', 'youth_price', 'infant_price', 'is_featured']
 
 @admin.register(PurchasedTickets)
 class PurchasedAdmin(admin.ModelAdmin):

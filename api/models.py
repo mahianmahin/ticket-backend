@@ -43,6 +43,7 @@ class BusPackages(models.Model):
     infant_price = models.IntegerField(verbose_name="Enter the price for Infants (0-5) in USD")
 
     package_tag = models.IntegerField(default=random_number())
+    is_featured = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.title)
@@ -78,6 +79,7 @@ class MuseumPackages(models.Model):
     dates = models.ManyToManyField(Date)
 
     package_tag = models.IntegerField(default=random_number())
+    is_featured = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.title)
