@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.core.files import File
 from django.core.serializers import serialize
 from django.db import IntegrityError
+from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from PIL import Image
 from rest_framework import status
@@ -40,14 +41,27 @@ def hero_image(request):
 def packages(request):
     bus_packages = BusPackages.objects.all()
     bus_serializer = BusPackagesSerializer(bus_packages, many=True)
-
+    folders = TicketFoldersSerializer(TicketFolders.objects.all(), many=True)
     museum_serializer = MuseumPackagesSerializer(MuseumPackages.objects.all(), many=True)
 
 
     return Response({
         'status': status.HTTP_200_OK,
         'bus_data': bus_serializer.data,
-        'museum_data': museum_serializer.data
+        'museum_data': museum_serializer.data,
+        'folders': folders.data
+    })
+
+@api_view(['GET'])
+def packages_list(request, id):
+    bus_packages = BusPackages.objects.filter(folder_id=id)
+    bus_serializer = BusPackagesSerializer(bus_packages, many=True)
+    museum_serializer = MuseumPackagesSerializer(MuseumPackages.objects.all(), many=True)
+
+
+    return Response({
+        'status': status.HTTP_200_OK,
+        'bus_data': bus_serializer.data,
     })
 
 @api_view(['GET'])
@@ -278,38 +292,3 @@ def claim_ticket(request, code, agent_username, agent_code):
             'status': status.HTTP_200_OK,
             'success': False
         })
-
-
-
-
-
-# backup of the function
-
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def authenticate_qr_codes(request, code):
-#     if request.user.is_staff:
-#         ticket_ins = PurchasedTickets.objects.get(package_unique_identifier=code)
-#         serializer = PurchasedTicketsSerializer(ticket_ins)
-
-#         if ticket_ins.qr_code_scanned:
-#             return Response({
-#                 'status': status.HTTP_200_OK,
-#                 'data': serializer.data,
-#                 'msg': 'This ticket is already claimed!'
-#             })
-        
-#         else:
-#             ticket_ins.qr_code_scanned = True
-#             ticket_ins.save()
-
-#             return Response({
-#                 'status': status.HTTP_200_OK,
-#                 'data': serializer.data,
-#                 'msg': 'Ticket claimed successfully!'
-#             })
-
-#     return Response({
-#         'status': status.HTTP_401_UNAUTHORIZED,
-#         'msg': 'You are not authorized to process the ticket!'
-#     })

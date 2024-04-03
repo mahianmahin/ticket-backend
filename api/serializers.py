@@ -8,6 +8,10 @@ class DateSerializer(serializers.ModelSerializer):
         model = Date
         fields = ('date',)
 
+class TicketFoldersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketFolders
+        fields = "__all__"
 
 class BusPackagesSerializer(serializers.ModelSerializer):
     class Meta:
