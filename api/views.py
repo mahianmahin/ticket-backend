@@ -1,4 +1,5 @@
 import json
+import os
 import random
 from io import BytesIO
 
@@ -11,6 +12,7 @@ from django.core.serializers import serialize
 from django.db import IntegrityError
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
+from dotenv import load_dotenv
 from PIL import Image
 from rest_framework import status
 from rest_framework.decorators import (api_view, parser_classes,
@@ -22,6 +24,7 @@ from rest_framework.response import Response
 from .models import *
 from .serializers import *
 
+load_dotenv()
 
 def process_query(model_query):
     return json.loads(serialize("json", model_query))
@@ -130,9 +133,7 @@ def user_register(request):
             'data': str(e)
         })
 
-test_secret_key = "sk_test_51O7GYsDBCudQgM49KyBAdFWQiPTP1KVWExXAmdqLNnFtBtiomOoVcDOWPpZQv09bthGoPvlqZJ8vc7SHEoE2agZB00nloJXZ2g"
-# live_secret_key_old = "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"
-live_secret_key = "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"
+live_secret_key = os.getenv('LIVE_SECRET_KEY')
 
 # stripe secret key
 stripe.api_key = live_secret_key
