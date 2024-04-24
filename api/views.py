@@ -134,7 +134,7 @@ def user_register(request):
         })
 
 # stripe secret key
-stripe.api_key = os.getenv('LIVE_SECRET_KEY')
+stripe.api_key = "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"
 
 
 # qr_code generation
