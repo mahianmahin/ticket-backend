@@ -133,10 +133,8 @@ def user_register(request):
             'data': str(e)
         })
 
-live_secret_key = os.getenv('LIVE_SECRET_KEY')
-
 # stripe secret key
-stripe.api_key = live_secret_key
+stripe.api_key = os.getenv('LIVE_SECRET_KEY')
 
 
 # qr_code generation
