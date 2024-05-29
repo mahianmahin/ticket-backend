@@ -24,6 +24,24 @@ class TicketFolders(models.Model):
     
 
 class BusPackages(models.Model):
+    class Type(models.TextChoices):
+        TYPE_24_HOURS = '24 hours', '24 Hours',
+        TYPE_48_HOURS = '48 hours', '48 Hours',
+        TYPE_72_HOURS = '72 hours', '72 Hours',
+        TYPE_1_DAY = '1 day', '1 Day',
+        TYPE_3_PASS = '3 pass', '3 Pass',
+        TYPE_DAILY_TOUR = 'daily tour', 'Daily tour',
+        TYPE_HALF_DAY = 'half day', 'Half day',
+        TYPE_ONE_RUN = 'one run', 'One run'
+
+    class Company(models.TextChoices):
+        BIG_BUS = 'big bus', 'Big bus',
+        GREEN_LINE = 'green line', 'Green line',
+        I_LOVE_ROME = 'i love rome', 'I love rome',
+        IO_BUS = 'io_bus', 'IO bus',
+        CITY_SIGHTSEEING = 'city sightseeing', 'City sightseeing'
+
+
     folder = models.ForeignKey(TicketFolders, on_delete=models.CASCADE, null=True)
     purchased_date = models.DateTimeField(auto_now=True)
     image_big = models.ImageField(upload_to="bus_packages")
@@ -42,12 +60,19 @@ class BusPackages(models.Model):
     youth_price = models.IntegerField(verbose_name="Enter the price for Youths (6-18) in USD")
     infant_price = models.IntegerField(verbose_name="Enter the price for Infants (0-5) in USD")
 
-    package_tag = models.IntegerField(default=random_number())
+    package_tag = models.IntegerField(editable=False)
     is_featured = models.BooleanField(default=False)
 
-    def __str__(self):
-        return str(self.title)
+    ticket_type = models.CharField(max_length=100, choices=Type.choices, null=True, blank=True)
+    company = models.CharField(max_length=100, choices=Company.choices, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        if not self.package_tag:
+            self.package_tag = random_number()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title or "Untitled Package"
 
 
 class Date(models.Model):
@@ -78,11 +103,16 @@ class MuseumPackages(models.Model):
 
     dates = models.ManyToManyField(Date)
 
-    package_tag = models.IntegerField(default=random_number())
+    package_tag = models.IntegerField(editable=False)
     is_featured = models.BooleanField(default=False)
 
+    def save(self, *args, **kwargs):
+        if not self.package_tag:
+            self.package_tag = random_number()
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return str(self.title)
+        return self.title or "Untitled Package"
 
 
 class PurchasedTickets(models.Model):
